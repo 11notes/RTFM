@@ -2,7 +2,7 @@
 
 # DISTROLESS CONTAINER IMAGES
 
-What are distroless container images and why are they the best option to run applications as containers?
+*What are distroless container images and why are they the best option to run applications as containers?*
 
 # SYNOPSIS 📖
 
@@ -39,5 +39,5 @@ Now we know why distroless is better in terms of security, but requires more eff
 
 **If you want better security for your container images, run them distroless.**
 
-[^1]: You can execute commands from your host OS inside another namespace via ```nsenter```, like this: ```nsenter -t $(docker inspect -f '{{.State.Pid}}' adguard-app-1) -n netstat -tulpn```. This means you can execute binaries which are not present in the distroless image from your host OS as if they were in the image, pretty neat,
+[^1]: You can execute commands from your host OS inside another namespace via ```nsenter```, like this: ```nsenter -t $(docker inspect -f '{{.State.Pid}}' adguard-app-1) -n netstat -tulpn```. This means you can execute binaries which are not present in the distroless image from your host OS as if they were in the image, pretty neat
 [^2]: If you get the process ID of the container image you can view the file system under ```ls -lah /proc/$(docker inspect -f '{{.State.Pid}}' adguard-app-1)/root/*```,
