@@ -6,7 +6,7 @@
 
 # SYNOPSIS 📖
 
-A distroless image is a container image that is not using the default file system of any operating system. A container image like [alpine](https://hub.docker.com/_/alpine) is very small, but contains all needed binaries to run said operating system in a container. This has advantages but also major disadvantagess. Let's talk about the advantages first:
+A distroless image is a container image that is not using the default file system of any operating system. A container image like [alpine](https://hub.docker.com/_/alpine) is very small, but contains all needed binaries to run said operating system in a container. This has advantages but also major disadvantages. Let's talk about the advantages first:
 
 ## ADVANTAGES OF A FULL IMAGE
 > [!TIP]
@@ -14,7 +14,7 @@ A distroless image is a container image that is not using the default file syste
 >* It contains many binaries that can help you if you have problems with a container image (ls, netstat, grep, find)
 >* Binaries that need shared libraries can find then just like on a bare metal installation
 
-Sadly, these advantages are also disadvantages when it comes to container and security. Having a shell is problem number one. If an app inside a container gets exploited through a remote code execution, the attacker can now use the shell to do anything inside the container image. If the image has access to the internet, an attacker can use ```curl``` or ```wget``` to download malicious binaries to poison the image even further or even place malicious content on your volumes. This brings us to the disatvantages:
+Sadly, these advantages are also disadvantages when it comes to container and security. Having a shell is problem number one. If an app inside a container gets exploited through a remote code execution, the attacker can now use the shell to do anything inside the container image. If the image has access to the internet, an attacker can use ```curl``` or ```wget``` to download malicious binaries to poison the image even further or even place malicious content on your volumes. This brings us to the disadvantages:
 
 ## DISATVANTAGES OF A FULL IMAGE
 > [!CAUTION]
@@ -40,4 +40,4 @@ Now we know why distroless is better in terms of security, but requires more eff
 **If you want better security for your container images, run them distroless.**
 
 [^1]: You can execute commands from your host OS inside another namespace via ```nsenter```, like this: ```nsenter -t $(docker inspect -f '{{.State.Pid}}' adguard-app-1) -n netstat -tulpn```. This means you can execute binaries which are not present in the distroless image from your host OS as if they were in the image, pretty neat
-[^2]: If you get the process ID of the container image you can view the file system under ```ls -lah /proc/$(docker inspect -f '{{.State.Pid}}' adguard-app-1)/root/*```,
+[^2]: If you get the process ID of the container image you can view the file system under ```ls -lah /proc/$(docker inspect -f '{{.State.Pid}}' adguard-app-1)/root/*```
