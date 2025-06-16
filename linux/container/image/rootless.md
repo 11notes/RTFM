@@ -82,3 +82,7 @@ The solution, besides running rootless images, is to simply run a rootless conta
 # CONCULUSION
 
 Now we know why rootless images are the better option to run apps withing a container. It requires a little more preparation for the image creator to make their images run rootless by default, but it’s possible for any apps. If an app requires special privileges, instead of granting the entire container image said capabilities, the maintainer of the image can also simply assign the privilege to the binary that requires said capability, reducing the attack surface even more. Combined with [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images, rootless is the best approach to secure images for all and not just a select few who know what they are doing.
+
+**If you want better security for your container images, run them rootless from the start, not after they started.**
+
+[^1]: Root inside a container is not the same as root on the host, but root does get a lot of system capabilities that can be misused for container exploitation. If the container image was started with the privileged flag, root can now give itself any and all privileges and actually access the host from within the container.
