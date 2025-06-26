@@ -14,6 +14,10 @@ That’s very simple: **It requires a lot of effort.** Most changes to a contain
 
 The next issue with this simple expression *"just create a PR, duh!"* is politics. Many projects do not allow changes from outsiders, by default. Others require you to sign off on your contribution, meaning you will not get credited for all the work you did. Bringing politics into programming has almost never benefits. Structure is important, but why fight political battles in why rootless is better when you can instead just create your rootless image yourself, without everyone fighting you along the way? People and especially developers do not like change. An outsider telling them what they do is wrong will automatically generate pushback and nothing else. Time spent fighting those pushbacks can be better used to develop a better container image.
 
+# PERSONAL EXPERIENCE
+
+I’ve had my fair share of all these political interactions. I’ve had developers denying my PR because the indent was wrong or because I added comments in a different style that they wanted. Some started the old debate of Alpine vs. Debian instead of focusing a lightweight image for their users. Code was never accepted as it was. It was always scrutinized for reasons that are either pure vanity or pride. These hundreds of hours wasted are proof that creating a simple PR request to make the original image better, is a lie.
+
 # CONCULUSION
 
 The next time you see someone pointing out to *"just create a PR"* think about how hard this actually is and what a can of worms in terms of politics this opens. All this just to switch a container image from root to rootless.
