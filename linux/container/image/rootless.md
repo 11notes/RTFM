@@ -74,6 +74,23 @@ The app does not run as root, it runs as the UID specified, so far so good, but 
 
 This image provider uses root and s6 for convenience, foremost to ```chown``` the directories with the correct UID/GID when you use bind mounts and you forgot to set the correct permissions. This tradeoff between security and convenience is not a very good trade in my opinion, ignoring the fact that s6 is also used to run a single service inside a container, something s6 is not needed for. It also prevents said image provider from using [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images all together, because s6 relies on OS libraries to work.
 
+# S6 AND PSEUDO ROOTLESS (SUID PROBLEM)
+
+Even if you start an s6 based image with a user, like from the very well known provider, there is an executable present in the image that will **always execute as root**, that’s also why said image provider does not allow you to set the ``` no-new-privileges:true``` flag, because this prevents this executable to run as root, breaking the whole **rootless** image lie. Don’t believe me? Well, simply search any image that uses s6 or pretends to be rootless with ```find / -user root -perm -4000 -exec ls -ldb {} \;```. This will show you all executables that will execute as root, even if you are not running as root.
+
+What do you find in all images of said image provider that uses s6 for everything:
+```
+-rwsr-xr-x 1 root root 42216 May  7 08:23 /package/admin/s6-overlay-helpers-0.1.2.0/command/s6-overlay-suexec
+```
+
+What happens if you start an image like this while preventing new Linux caps:
+```
+docker run --rm -ti --user 7000:7000 --security-opt=no-new-privileges:true ...
+s6-overlay-suexec: fatal: child failed with exit code 100
+```
+
+To no ones surprise, it does not work. As you can see, this image provider is lying to you and hiding the fact that there is an executable that will execute as root, no matter what user you set when starting the image. A true rootless image does not have an executable in it that can be executed as root, it is by default rootless and can only run as a pre coded user ID.
+
 
 # ROOTLESS RUNTIMES OR USERNS MAP
 
@@ -81,7 +98,7 @@ The solution, besides running rootless images, is to simply run a rootless conta
 
 # CONCULUSION
 
-Now we know why rootless images are the better option to run apps withing a container. It requires a little more preparation for the image creator to make their images run rootless by default, but it’s possible for any apps. If an app requires special privileges, instead of granting the entire container image said capabilities, the maintainer of the image can also simply assign the privilege to the binary that requires said capability, reducing the attack surface even more. Combined with [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images, rootless is the best approach to secure images for all and not just a select few who know what they are doing.
+Now we know why rootless images are the better option to run apps withing a container. We also know that certain image providers lie to you about their capabilities of running images rootless. It requires a little more preparation for the image creator to make their images run rootless by default, but it’s possible for any apps. If an app requires special privileges, instead of granting the entire container image said capabilities, the maintainer of the image can also simply assign the privilege to the binary that requires said capability, reducing the attack surface even more. Combined with [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images, rootless is the best approach to secure images for all and not just a select few who know what they are doing.
 
 **If you want better security for your container images, run them rootless from the start, not after they started.**
 
