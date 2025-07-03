@@ -16,7 +16,7 @@ A distroless image is a container image that is not using the default file syste
 
 Sadly, these advantages are also disadvantages when it comes to container and **security**. Having a shell is problem number one. If an app inside a container gets exploited through a remote code execution, the attacker can now use the shell to do anything inside the container image. If the image has access to the internet, an attacker can use ```curl``` or ```wget``` to download malicious binaries to poison the image even further or even place malicious content on your volumes. This brings us to the disadvantages:
 
-## DISATVANTAGES OF A FULL IMAGE
+## DISADVANTAGES OF A FULL IMAGE
 > [!CAUTION]
 >* Since they contain a lot of binaries from the OS in question, they are a lot bigger in image size on disk
 >* An exploited app inside the container gets access to a plethora of tools to further exploit the image or the network or even the host itself (shell, downloads, permission management, setuid) as well as your persistent volumes
@@ -25,13 +25,13 @@ Sadly, these advantages are also disadvantages when it comes to container and **
 
 How can distroless images solve these issues (but introduce new ones)? Well, since they are distroless, they do not have binaries of an operating system. No ```ls```, no ```curl``` and no ```sudo```. An attacker that exploited the app within the container, gets access to basically nothing, and that’s the whole point. To prevent access to system binaries that could be used for further exploits. This prevents lateral movement within the container or the running container host. Nothing is without flaws, so let’s see the disadvantages of distroless:
 
-## DISATVANTAGES OF DISTROLESS
+## DISADVANTAGES OF DISTROLESS
 > [!CAUTION]
 >* Only statically linked binaries work, dynamically linked binaries depend on OS provided libraries like OpenSSL and zlib
 >* You can’t ```docker exec -ti``` into the image, you can however access the image the same way by switching to it’s namespace[^1]
 >* You can't inspect and see the file system of the image via ```docker exec -ti ls -lah *```, but you can on the host[^2]
 
-As you can see in the footnotes, we can solve some of the disadvantages, from a day to day operations point of view, quite easily. The static linking requirement can also be solved by compiling the binaries as such, this requires a little more effort during the compilation of the app in question and also longer compilation time, but it’s possible for almost all apps to do this. Sadly, most official images or providers do not statically link their binaries, which means you have to do it yourself or use image providers that do ship distroless, like a lot of my images do (you can checkout my github repo).
+As you can see in the footnotes, we can solve some of the disadvantages, from a day-to-day operations point of view, quite easily. The static linking requirement can also be solved by compiling the binaries as such, this requires a little more effort during the compilation of the app in question and also longer compilation time, but it’s possible for almost all apps to do this. Sadly, most official images or providers do not statically link their binaries, which means you have to do it yourself or use image providers that do ship distroless, like a lot of my images do (you can check out my github repo).
 
 # CONCULUSION
 
