@@ -33,7 +33,7 @@ How can distroless images solve these issues (but introduce new ones)? Well, sin
 
 As you can see in the footnotes, we can solve some of the disadvantages, from a day-to-day operations point of view, quite easily. The static linking requirement can also be solved by compiling the binaries as such, this requires a little more effort during the compilation of the app in question and also longer compilation time, but it’s possible for almost all apps to do this. Sadly, most official images or providers do not statically link their binaries, which means you have to do it yourself or use image providers that do ship distroless, like a lot of my images do (you can check out my github repo).
 
-# CONCULUSION
+# CONCLUSION
 
 Now we know why distroless is better in terms of security, but requires more effort on the image creator’s side. **If you can, always opt for distroless** when running an image. If the image provider doesn’t have one, you can gladly reach out to me on this repo to ask if it’s possible to create a distroless image for your app in question. There are apps which can’t be run distroless, basically all of python is very difficult to run true distroless because you can’t really efficiently compile python to a static binary. If the app in question is based on C or Go, then it’s pretty simple to create a static binary that can then be run distroless, unless the app creator actually prevents this by depending on dynamic links (which can happen sometimes) and refuses to change the code.
 
