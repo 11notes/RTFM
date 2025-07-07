@@ -2,7 +2,7 @@
 
 # I HAVE CGNAT AND CAN’T EXPOSE SERVICES TO WAN, WHAT CAN I DO?
 
-*This question gets asked a lot and is faced with a multitude of solutions that in end all do the exact same thing. So what can you do to solve this?
+*This question gets asked a lot and is faced with a multitude of solutions that in end all do the exact same thing. So what can you do to solve this?*
 
 # SYNOPSIS 📖
 
@@ -37,7 +37,7 @@ If you don’t care about privacy and the dependency on cloud offerings, use one
 
 **If you want things done right, you have to do it yourself.**
 
-[^1]: Private IPv4 address spaces (subnets) are defined as followed: [Wikipedia]https://en.wikipedia.org/wiki/Private_network)
+[^1]: Private IPv4 address spaces (subnets) are defined as followed: [Wikipedia](https://en.wikipedia.org/wiki/Private_network)
 [^2]: ZTNA is a fancy acronym for an overlay network with ACL, you can find out more how it works here: [ZTNA explained](https://www.zscaler.com/resources/security-terms-glossary/what-is-zero-trust-network-access)
 [^3]: Free cloud offerings are often restricted in their features and you are at the mercy of the company who can cancel your free account at any time for any reason, consider this security implication before signing up for free services. Nothing is free, if it is, you or your data is the product and value they are getting
 [^4]: Man in the middle, is a cyber security attack where a service is handling and decrypting a connection on your behalf and then sending you the data. This means that the man in the middle, sees all data in clear text. The goal of such an attack is to exfiltrate information
