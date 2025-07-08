@@ -1,0 +1,33 @@
+{
+  "hosts": ["unix:///run/docker.sock"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "1",
+    "labels": "production_status",
+    "env": "os,customer"
+  },
+  "data-root": "/opt/docker",
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.size=4G"
+  ],
+  "bip": "169.254.253.254/23",
+  "fixed-cidr": "169.254.252.0/23",
+  "default-address-pools":[
+    {"base":"169.254.2.0/23","size":28},
+    {"base":"169.254.4.0/22","size":28},
+    {"base":"169.254.8.0/21","size":28},
+    {"base":"169.254.16.0/20","size":28},
+    {"base":"169.254.32.0/19","size":28},
+    {"base":"169.254.64.0/18","size":28},
+    {"base":"169.254.128.0/18","size":28},
+    {"base":"169.254.192.0/19","size":28},
+    {"base":"169.254.224.0/20","size":28},
+    {"base":"169.254.240.0/21","size":28},
+    {"base":"169.254.248.0/22","size":28}
+  ],
+  "mtu": 9000,
+  "dns": ["DNS1","DNS2"],
+  "registry-mirrors": ["https://docker.domain.com"]
+}
