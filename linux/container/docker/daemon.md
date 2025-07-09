@@ -8,7 +8,7 @@
 
 The Docker daemon.json, located at ```/etc/docker``` holds configuration data to configure the Docker Daemon (its runtime settings). This is a very useful configuration file to set some default for Docker itself, but also for all the images that are run by Docker. Depending on your distro, there might already be a file present or you can create one yourself. The settings in this file will (or better should) overwrite any setting that was set by whatever installation method you took to install Docker.
 
-Here is the daemon.json used in this RTFM repository:
+Here is the [daemon.json](https://github.com/11notes/RTFM/blob/main/linux/container/docker/daemon.json) used in this RTFM repository:
 
 ```json
 {
@@ -109,7 +109,7 @@ It is also adviced to move the entire Docker installation to the ```data-root```
 
 ```default-address-pools``` are the IP address pools that Docker is allowed to create itself when using default settings for networking. As you can see the entire 169.254/16 subnet is split into very weird /23, /22, /21 network chunks. From these network chunks Docker is allowed to create a /28 subnet for each defined ```networks```.  A /28 means that each defined network can only assign a maximum of 14 IP addresses, so in theory you can run a maximum of 14 container images that use networking in a single ```networks:``` definition. Since we can define multiple ```networks:``` however we like, this is not really a limitation, unless you really need more than 14 containers in a single network (hint: containers can communicate between multiple networks too!).
 
-```mtu`` is the default MTU size used for each network defined. It must align with the physical switchport MTU. If your network is not using jumbo frames (aka MTU 9000), the default is 1500. Some applications, like file sharing, video streaming and other apps that send large amount of data, benefit from an MTU setting of 9000, but only if your entire network supports MTU 9000. Check your switches and routers if they do support jump frames.
+```mtu``` is the default MTU size used for each network defined. It must align with the physical switchport MTU. If your network is not using jumbo frames (aka MTU 9000), the default is 1500. Some applications, like file sharing, video streaming and other apps that send large amount of data, benefit from an MTU setting of 9000, but only if your entire network supports MTU 9000. Check your switches and routers if they do support jump frames.
 
 ```dns``` are the default DNS servers used for each container. You can specify individual DNS servers via compose, but these are the default ones used. If you run your own DNS servers, it makes sense to set these here.
 
