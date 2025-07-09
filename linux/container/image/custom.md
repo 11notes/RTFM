@@ -18,7 +18,7 @@ The next issue with this simple expression *"just create a PR, duh!"* is politic
 
 I’ve had my fair share of all these political interactions. I’ve had developers denying my PR because the indent was wrong or because I added comments in a different style that they wanted. Some started the old debate of Alpine vs. Debian instead of focusing a lightweight image for their users. Code was never accepted as it was. It was always scrutinized for reasons that are either pure vanity or pride. These hundreds of hours wasted are proof that creating a simple PR request to make the original image better, is a lie.
 
-# CONCULUSION
+# CONCLUSION
 
 The next time you see someone pointing out to *"just create a PR"* think about how hard this actually is and what a can of worms in terms of politics this opens. All this just to switch a container image from root to rootless.
 

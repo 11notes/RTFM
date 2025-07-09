@@ -96,7 +96,7 @@ To no ones surprise, it does not work. As you can see, this image provider is ly
 
 The solution, besides running rootless images, is to simply run a rootless container runtime, like Podman, k8s, sysbox and so on. Docker itself can be run rootless too, and requires some preparation to do so. You can also use userns-remap to remap root inside the container to an arbitrary user on the host, eliminating most of the issues which are presented by images that use root. The problem with all of this is, that by default, most people use Docker, and Docker is by default **not rootless**. This means that most people are affected by the issues described and should opt, whenever possible, always to use **rootless images** and not rely on some promises of an image provider that root can’t be exploited in their images, which it totally can and in the future will be.
 
-# CONCULUSION
+# CONCLUSION
 
 Now we know why rootless images are the better option to run apps withing a container. We also know that certain image providers lie to you about their capabilities of running images rootless. It requires a little more preparation for the image creator to make their images run rootless by default, but it’s possible for any apps. If an app requires special privileges, instead of granting the entire container image said capabilities, the maintainer of the image can also simply assign the privilege to the binary that requires said capability, reducing the attack surface even more. Combined with [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images, rootless is the best approach to secure images for all and not just a select few who know what they are doing.
 
