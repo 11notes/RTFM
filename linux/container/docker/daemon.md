@@ -51,14 +51,16 @@ That doesn’t tell us much, so let’s break it down a little.
 # HOSTS AND LOGS
 
 ```json
-"hosts": ["unix:///run/docker.sock"],
-"log-driver": "json-file",
-"log-opts": {
-  "max-size": "10m",
-  "max-file": "1",
-  "labels": "production_status",
-  "env": "os,customer"
-},
+{
+  "hosts": ["unix:///run/docker.sock"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "1",
+    "labels": "production_status",
+    "env": "os,customer"
+  }
+}
 ```
 
 ```hosts``` tells the Docker Daemon to listen on this interface. This can be a network interface with an IP and a port or in this default, the UNIX socket exposed via the socket file located at ```/run/docker.sock```. Anyone with access to this file, can directly interact with the Docker socket without any form of authentication. This means access to this file has to be very well guarded. If you plan to expose this file to a container which needs to interact with the socket, please do so with a secure socket-proxy like my own [11notes/socket-proxy](https://github.com/11notes/docker-socket-proxy) image. You find more about exposing the Docker socket in my [RTFM](https://github.com/11notes/RTFM/blob/main/linux/container/docker/socket.md).
@@ -68,11 +70,13 @@ That doesn’t tell us much, so let’s break it down a little.
 # STORAGE
 
 ```json
+{
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
     "overlay2.size=4G"
-  ],
+  ]
+}
 ```
 
 ```data-root``` is the most important one. It will tell Docker to store everything there, this has a huge impact on performance as well as the abilities you gain from that. It is recommended to store everything Docker related on an XFS formatted volume. Simply create a LVM volume and format it with XFS and mount it on ```/opt/docker```.
@@ -86,6 +90,7 @@ It is also adviced to move the entire Docker installation to the ```data-root```
 # NETWORKING
 
 ```json
+{
   "bip": "169.254.253.254/23",
   "fixed-cidr": "169.254.252.0/23",
   "default-address-pools":[
@@ -102,7 +107,8 @@ It is also adviced to move the entire Docker installation to the ```data-root```
     {"base":"169.254.248.0/22","size":28}
   ],
   "mtu": 9000,
-  "dns": ["DNS1","DNS2"],
+  "dns": ["DNS1","DNS2"]
+}
 ```
 
 ```bip``` and ```fixed-cidr``` is our default bridge network for containers that don't define a ```networks:``` property in the compose. ```bip``` is the default gateway used on this network.
@@ -120,6 +126,7 @@ You have probably never seen this subnet and might think this is not a private s
 # MIRROS
 
 ```json
+{
   "registry-mirrors": ["https://docker.domain.com"]
 }
 ```
