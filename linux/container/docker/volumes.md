@@ -10,19 +10,19 @@ Docker volumes are the best way to persist data from your containers in an ephem
 
 ## TYPES OF VOLUMES
 
-Docker knows exactly three types of volumes:
+Docker knows exactly three types of volumes/mounts:
 
-**Named:** Docker will create the volume for you in the path specified in your [daemon.json](https://github.com/11notes/RTFM/blob/main/linux/container/docker/daemon.json) you set via the ```data-root``` property. Docker will create folders that do not exist and used the UID/GID that is used for the executing process of the image.
+**Named:** Docker will create the volume for you in the path specified in your [daemon.json](https://github.com/11notes/RTFM/blob/main/linux/container/docker/daemon.json) you set via the ```data-root``` property. Docker will create folders that do not exist and use the UID/GID that is used for the executing process of the image.
 
 **Bind:** Docker will mount the volume from the host into the container. Docker **will not create any missing folders** and **will not set any permissions** like the UID/GID executing the process in the image.
 
-**Tmpfs:** Docker will mount a tmpfs directory into the container. This type of mount has multiple additional options compared to the other too types and is not really persistent since the data is kept in RAM (tmpfs) and swap and not on disk. Use this type of volume for temporary data, like transcoding, logs and other files you do not need and will always be re-created.
+**Tmpfs:** Docker will mount a tmpfs directory into the container. This type of mount has multiple additional options compared to the other two types and is not really persistent since the data is kept in RAM (tmpfs) and swap and not on disk. Use this type of volume for temporary data, like transcoding, logs and other files you do not need and can be re-created.
 
 # BIND MOUNTS AND THE HORROS BEYOND
 
-So why is basically everyone using bind volumes (mounts) and not named volumes? Well, a lot of compose examples on the internet feature this type of volume by default. It’s also the easiest to understand since it is identical to mounting a folder in Linux. Be it from an NFS server or from an external HDD. It works exactly the same, but since we use Docker as IaC[^1] we actually complicate things needlessly when using them.
+So why is basically everyone using bind mounts and not named volumes? Well, a lot of compose examples on the internet feature this type of volume by default. It’s also the easiest to understand since it is identical to mounting a folder in Linux. Be it from an NFS server or from an external HDD. It works exactly the same, but since we use Docker as IaC[^1] we actually complicate things needlessly when using them.
 
-The first problem arises that bind mounts are not managed by Docker but by you. This simply means you are responsible for creating the entire folder structure and you are responsible for settings all the correct permissions and so on. Pretty tedious if you ask me when we are using Docker compose and all its IaC[^1] advantages.
+The first problem arises is that bind mounts are not managed by Docker but by you. This simply means you are responsible for creating the entire folder structure and you are responsible for settings all the correct permissions and so on. Pretty tedious if you ask me when we are using Docker compose and all its IaC[^1] advantages.
 
 Another limiting factor is that we can’t limit the size of a bind mount via compose, but we must set this quota directly on the host to ensure the bind mount can’t grow bigger than 10GB for instance. So instead of defining this property, 10GB limit, in my compose, I must configure this directly on the host, which is anti-IaC, since I now have to manage two sets of configurations: The host and the compose file.
 
