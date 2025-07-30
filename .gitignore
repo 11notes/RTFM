@@ -1,0 +1,6 @@
+# default
+maintain/
+node_modules/
+
+# custom
+.wip
