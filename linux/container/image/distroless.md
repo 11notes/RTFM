@@ -41,3 +41,4 @@ Now we know why distroless is better in terms of security, but requires more eff
 
 [^1]: You can execute commands from your host OS inside another namespace via ```nsenter```, like this: ```nsenter -t $(docker inspect -f '{{.State.Pid}}' adguard-app-1) -n netstat -tulpn```. This means you can execute binaries which are not present in the distroless image from your host OS as if they were in the image, pretty neat
 [^2]: If you get the process ID of the container image you can view the file system under ```ls -lah /proc/$(docker inspect -f '{{.State.Pid}}' adguard-app-1)/root/*```
+_Note:_ The above commands won't directly work on MacOS (which runs `docker` and `podman` inside a VM), you must first enter a shell within that VM. `docker` doesn't offer a VM's shell, but `podman` does, open it with `podman machine ssh`.
