@@ -4,6 +4,9 @@
 
 *What are Docker volumes and why should I always prefer named volumes instead of bind mounts?*
 
+# TL;DR - FOR BEGINNERS
+Named volumes are the easiest way to work with persistent data and containers. They do all the heavy lifting for you. Use them by default!
+
 # SYNOPSIS 📖
 
 Docker volumes are the best way to persist data from your containers in an ephemeral way, yet many people use them completely wrong. Lets clear up this misconception and misuse of Docker volumes!

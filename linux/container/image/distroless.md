@@ -4,6 +4,9 @@
 
 *What are distroless container images and why are they the best option to run applications as containers?*
 
+# TL;DR - FOR BEGINNERS
+Distroless containers **contain no other software inside the container** except the app itself. This is the purest and the most secure form to run an app. An attacker that can exploit the app inside has no shell, no Linux tools, nothing at his disposal to further attack your network. The added security benefits are immense, that’s why one should always aim to use a distroless image if available!
+
 # SYNOPSIS 📖
 
 A distroless image is a container image that is not using the default file system of any operating system. A container image like [alpine](https://hub.docker.com/_/alpine) is very small, but contains all needed binaries to run said operating system in a container. This has advantages but also major disadvantages. Let's talk about the advantages first:

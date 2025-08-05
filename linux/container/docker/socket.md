@@ -4,6 +4,9 @@
 
 *What is the Docker socket accessed by so many images and why should it not be done?*
 
+# TL;DR - FOR BEGINNERS
+Never expose the Docker socket to anything without the use of a socket-proxy in-between!
+
 # SYNOPSIS 📖
 
 The Docker socket is a simple UNIX socket allowing you to connect to the Docker API, instead via TCP, directly via a file. Many images that need to read or interact with the Docker socket need access to it, but most of the images do it with full permissions and not just the subset of instructions they actually need.

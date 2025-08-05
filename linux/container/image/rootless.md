@@ -4,6 +4,9 @@
 
 *What are rootless container images and why are they the best option to run applications inside containers?*
 
+# TL;DR - FOR BEGINNERS
+Rootless containers **never start or run as root**.  All apps inside are executed as an unprivileged user account. The apps inside **can never gain root privileges**. This prevents the app from performing most tasks which could harm you.
+
 # SYNOPSIS 📖
 
 A rootless container is simply put a container that by default will not execute as root but as a pre-defined user during the creation of the image. A build file for Docker for instance, can contain the ```USER``` directive to set the user during the build process but also at the end. During the build process you most certainly want to execute everything as root, since you want to be able to install packages, modify the file system of the container and much more. The last step of a build file is the execution step, where the builder of the image instructs the container runtime what process to start and as **who**. If no user us specified it will **default to root.** You can however, specify any arbitrary UID and GID to start the container as. Let's check a simple build file with no user:
@@ -39,7 +42,7 @@ Well, that’s what we want. The process inside the container is not executed as
 
 # THE LIES THEY SPREAD ABOUT ROOT
 
-Let’s talk about capabilities and the Linux kernel real quickly. Capabilities give you access to certain Linux kernel features. Normal users do not get any caps at all, but root does, even as containers. Let's quicky build an image with a binary needed to display our Linux capabilities:
+Let’s talk about capabilities and the Linux kernel real quickly. Capabilities give you access to certain Linux kernel features. Normal users do not get any caps at all, but root does, even in a container. Let's quicky build an image with a binary needed to display our Linux capabilities:
 
 ```dockerfile
 FROM alpine
@@ -62,7 +65,7 @@ docker run --rm -u 1000:1000 rtfm/caps capsh --print
 Current: =
 ```
 
-As you can see, root has many Linux caps, while the user 1000 has none, just like it should be. So why does root in a container, and isolated namespace, have any capabilities at all? Well, Docker and other container orchestrations ship with **default capabilities** for each container. Why is it done that way? Because most of the capabilities are needed for an app running inside the container, but most does not mean all, and herein lies the issue with root inside a container.
+As you can see, root has many Linux caps, while the user 1000 has none, just like it should be. So why does root in a container, an isolated namespace, have any capabilities at all? Well, Docker and other container orchestrations ship with **default capabilities** for each container. Why is it done that way? Because most of the capabilities are needed for an app running inside the container, but most does not mean all, and herein lies the issue with root inside a container.
 
 Why give an app that runs inside the container [cap_net_raw]( https://man7.org/linux/man-pages/man7/capabilities.7.html) if it does not need that functionality? Well that’s exactly what you are doing if you execute the container as root. It get’s even worse if you copy/pasted some random compose.yml that contains for whatever reason the ```privileged: true``` flag. With this flag enabled, root within the container can assign itself **all capabilities** including the ones to access the host from within the container. If you execute said container as a user, not root, this is not possible, even though this flag was present.
 
@@ -72,11 +75,11 @@ Now address the elephant in the room: Starting a container as root but then usin
 
 The app does not run as root, it runs as the UID specified, so far so good, but the container starts as root, which means anything in the pre-startup phase is executed as root. This means anything in that pre-startup phase (aka s6) can be abused and misused to do all kinds of things. Now is this easy to do or achieve? No. It’s a highly sophisticated attack from within the app inside the container, but it is possible and that’s the problem. An attacker can use s6 to give itself more capabilities which are present thanks to s6 being run as root, something that does not work if s6 would not be executed as root (which doesn’t work because of setuid issue).
 
-This image provider uses root and s6 for convenience, foremost to ```chown``` the directories with the correct UID/GID when you use bind mounts and you forgot to set the correct permissions. This tradeoff between security and convenience is not a very good trade in my opinion, ignoring the fact that s6 is also used to run a single service inside a container, something s6 is not needed for. It also prevents said image provider from using [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images all together, because s6 relies on OS libraries to work.
+This image provider uses root and s6 for convenience, foremost to ```chown``` the directories with the correct UID/GID when you use bind mounts and you forgot to set the correct permissions. This tradeoff between security and convenience is not a very good trade in my opinion, ignoring the fact that s6 is also used to run a single service inside a container, something s6 is not needed for. It also prevents said image provider from using [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images all together, because s6 relies on OS libraries to work (sh, chown, chmod).
 
 # S6 AND PSEUDO ROOTLESS (SUID PROBLEM)
 
-Even if you start an s6 based image with a user, like from the very well known provider, there is an executable present in the image that will **always execute as root**, that’s also why said image provider does not allow you to set the ``` no-new-privileges:true``` flag, because this prevents this executable to run as root, breaking the whole **rootless** image lie. Don’t believe me? Well, simply search any image that uses s6 or pretends to be rootless with ```find / -user root -perm -4000 -exec ls -ldb {} \;```. This will show you all executables that will execute as root, even if you are not running as root.
+Even if you start an s6 based image with a user, like from the very well known provider, there is an executable present in the image that will **always execute as root**, that’s also why said image provider does not allow you to set the ```no-new-privileges:true``` flag, because this prevents this executable to run as root, breaking the whole **rootless** image. Don’t believe me? Well, simply search any image that uses s6 or pretends to be rootless with ```find / -user root -perm -4000 -exec ls -ldb {} \;```. This will show you all executables that will execute as root, even if you are not running as root.
 
 What do you find in all images of said image provider that uses s6 for everything:
 ```
