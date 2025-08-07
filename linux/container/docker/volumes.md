@@ -55,6 +55,26 @@ volumes:
   var:
   plugins:
 
+# BIND
+name: "reverse-proxy"
+services:
+  traefik:
+    image: "11notes/traefik:3.5.0"
+    # ...
+    volumes:
+      - "var:/traefik/var"
+      - "plugins:/traefik/plugins"
+    # ...
+
+volumes:
+  var:
+  plugins:
+    driver_opts:
+      type: none
+      o: bind
+      device: /path/to/local/volume
+
+
 
 # NFS
 name: "reverse-proxy"
