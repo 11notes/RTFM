@@ -5,7 +5,7 @@
 *What is the Docker socket accessed by so many images and why should it not be done?*
 
 # TL;DR - FOR BEGINNERS
-Never expose the Docker socket to anything without the use of a socket-proxy in-between!
+Never expose the Docker socket to anything without the use of a socket-proxy in-between! If an app needs access to your Docker socket, always ask **why does this app need access to my Docker socket in the first place?**
 
 # SYNOPSIS 📖
 

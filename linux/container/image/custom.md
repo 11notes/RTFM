@@ -4,6 +4,9 @@
 
 *People are quick to tell other developers to just create a PR (pull request) like on github, but what are the actual implications of this and why is it rarely done?*
 
+# TL;DR - FOR BEGINNERS
+Time. It costs an immense amount of time to convince others to go rootless or even distroless and more often than not you get huge pushback so in the end, nothing changes but you wasted hours. Hours that could have been used to create the better image in the first place, instead of battling with other devs.
+
 # SYNOPSIS 📖
 
 People who don’t write code or barely any code often quickly point out that a simple PR to the original image would have been the better approach than creating another custom image for the same app. They see the redundancy and automatically think this is bad. They do not see that the same problem can be approach from different angles. Just like you can grill your favourite cut in many different ways, so can you create container images in many different flavoures. That’s a good thing, not a bad thing. It gives people a choice. They can either use the original image, provided by the developer or they can use another version of this image with some twists and benefits, stuff the developer has not thought about. If you care about these benefits is completely up to you and not open for debate.
