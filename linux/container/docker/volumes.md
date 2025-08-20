@@ -15,7 +15,7 @@ Docker volumes are the best way to persist data from your containers in an ephem
 
 Docker knows exactly three types of volumes/mounts:
 
-**Named:** Docker will create the volume for you in the path specified in your [daemon.json](https://github.com/11notes/RTFM/blob/main/linux/container/docker/daemon.json) you set via the ```data-root``` property. Docker will create folders that do not exist and use the UID/GID that is used for the executing process of the image.
+**Named:** Docker will create the volume for you in the path specified in your [daemon.json](https://github.com/11notes/RTFM/blob/main/linux/container/docker/daemon.json) you set via the ```data-root``` property. Docker will create folders that do not exist and use the UID/GID that is present of the parent folder (if a parent folder is owned by 1000:1000 the sub folder will automatically be set to 1000:1000).
 
 **Bind:** Docker will mount the volume from the host into the container. Docker **will not create any missing folders** and **will not set any permissions** like the UID/GID executing the process in the image.
 
@@ -40,7 +40,7 @@ The last reason people are against using named volumes, is they think **they can
 # NAMED VOLUMES EXAMPLES
 
 ```yaml
-# normal type
+# NAMED
 name: "reverse-proxy"
 services:
   traefik:
