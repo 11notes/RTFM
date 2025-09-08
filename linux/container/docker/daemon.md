@@ -123,6 +123,9 @@ It is also adviced to move the entire Docker installation to the ```data-root```
 
 You have probably never seen this subnet and might think this is not a private subnet, but a public one. This is not the case. The 169.254/16 subnet is a special subnet that can be used on private networks, with an additional *drawback*. The subnet is non-routed and can only exist on a L2 network between devices which are all on the same L2 network. This makes it  useless if you want to route networks, but very useful for containers, which are by definition, in their own flat L2 network. Using this subnet also prevents any IP collisions from occurring on actual networks, since no normal network is using this subnet.
 
+> [!CAUTION]
+> Some applications ignore their interface if set to the 169.254/16 subnet. Make sure you set these subnets to their correct interface, like **tun** for a VPN or use another network mode like MACVLAN to expose these apps to WAN. Any app should always have a config option to define which interface to use to announce it’s public IP in P2P networks, check the app for such a setting.
+
 # MIRROS
 
 ```json
