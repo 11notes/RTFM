@@ -5,7 +5,7 @@
 *What are rootless container images and why are they the best option to run applications inside containers?*
 
 # TL;DR - FOR BEGINNERS
-Rootless containers **never start or run as root**.  All apps inside are executed as an unprivileged user account. The apps inside **can never gain root privileges**. This prevents the app from performing most tasks which could harm you. Even NIST agrees and outlines this in [NIST SP 800-190](https://csrc.nist.gov/pubs/sp/800/190/final).
+Rootless containers **never start or run as root**.  All apps inside are executed as an unprivileged user account. The apps inside **can never gain root privileges**. This prevents the app from performing most tasks which could harm you. Even NIST agrees and outlines this in [NIST SP 800-190](https://csrc.nist.gov/pubs/sp/800/190/final) ([PDF](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-190.pdf)).
 
 # SYNOPSIS 📖
 
