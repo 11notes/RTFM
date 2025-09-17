@@ -6,9 +6,10 @@
 # COMPLETED ✅
 - [x] [Plex](https://github.com/plexinc/pms-docker) - [11notes/plex](https://github.com/11notes/docker-plex) / [requested](https://github.com/11notes/RTFM/issues/5) by [framon98](https://github.com/framon98)
 - [x] [Joplin](https://github.com/laurent22/joplin) - [11notes/joplin](https://github.com/11notes/docker-joplin)
+- [x] [qBittorrent](https://github.com/qbittorrent/qBittorrent) - [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent) (from source, no more upstream dependency)
 
 # WORK IN PROGRESS 👨🏻‍💻
-- [ ]
+- [ ] 
 
 # TO BE REVIEWED 🗃
 - [ ] [Frigate](https://github.com/blakeblackshear/frigate) [requested](https://github.com/11notes/RTFM/issues/9) by [apommel](https://github.com/apommel)
