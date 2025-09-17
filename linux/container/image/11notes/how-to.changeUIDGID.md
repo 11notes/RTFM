@@ -1,7 +1,6 @@
 ![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
 
 # HOW-TO CHANGE UID/GID on 11notes container images
-
 *I don’t want to use the default 1000:1000 UID/GID pair and use my own UID/GID how can I do this?*
 
 # TL;DR - FOR BEGINNERS
@@ -11,7 +10,6 @@
 There is basically absolutely no reason to change the UID/GID to anything else. There is no security risk when multiple images run the exact same UID/GID pair (you do not need to specify a different UID/GID for each container). There is also no risk if you have an actual user with said UID/GID on your system, except that said user can read/write all files with that UID/GID. Which from withing a container is impossible and only works if said user accesses the host.
 
 ## CHANGE UID/GID THE CORRECT WAY
-
 All my container images have a parent folder that has the same name as the app inside. All you need to do is to chown said parent folder **once** with the UID/GID you want to use. You can either do this manually, by creating the volumes before starting the images and then chown said parent folder or you can do this directly in your compose:
 
 ```yaml
@@ -68,7 +66,6 @@ docker exec arr-sonarr-1 id
 ```
 
 # CONCLUSION
-
 Do not try to change the UID/GID unless you have a really good reason for this. If you do have one, simply use the compose method to change it.
 
-**Never change a running system, unless you really have to**
+**Never change a running system, unless you really have to!**
