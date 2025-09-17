@@ -15,5 +15,6 @@
 - [ ] [Frigate](https://github.com/blakeblackshear/frigate) [requested](https://github.com/11notes/RTFM/issues/9) by [apommel](https://github.com/apommel)
 - [ ] [nut](https://github.com/networkupstools/nut) [requested](https://www.reddit.com/r/elevennotes/comments/1moc7a3/up_to_date_nut_docker_image/) by [cfouche](https://www.reddit.com/user/cfouche/)
 - [ ] [rdt-client](https://github.com/rogerfar/rdt-client) [requested](https://github.com/11notes/docker-radarr/issues/1) by [MrModest](https://github.com/MrModest)
+- [ ] [qBittorrent Themes](https://github.com/qbittorrent/qBittorrent/wiki/List-of-known-qBittorrent-themes) [requested](https://www.reddit.com/r/selfhosted/comments/1nj9dg2/comment/neoo427/) by [rursache](https://www.reddit.com/user/rursache/) and [PlanktonSuccessful65](https://www.reddit.com/user/PlanktonSuccessful65/)
 
 # REJECTED ❌
