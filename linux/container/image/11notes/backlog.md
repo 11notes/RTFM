@@ -9,7 +9,7 @@
 - [x] [qBittorrent](https://github.com/qbittorrent/qBittorrent) - [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent) (from source, no more upstream dependency)
 
 # WORK IN PROGRESS 👨🏻‍💻
-- [ ] 
+- [ ] Static git for distroless image and leaner workflows
 
 # TO BE REVIEWED 🗃
 - [ ] [Frigate](https://github.com/blakeblackshear/frigate) [requested](https://github.com/11notes/RTFM/issues/9) by [apommel](https://github.com/apommel)
