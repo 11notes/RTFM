@@ -5,7 +5,11 @@
 *What are distroless container images and why are they the best option to run applications as containers?*
 
 # TL;DR - FOR BEGINNERS
-Distroless containers **contain no other software inside the container** except the app itself. This is the purest and the most secure form to run an app. An attacker that can exploit the app inside has no shell, no Linux tools, nothing at his disposal to further attack your network. The added security benefits are immense, that’s why one should always aim to use a distroless image if available! [NIST SP 800-123/4.2.1](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-123.pdf) highlights this as well.
+Distroless containers **contain no other software inside the container** except the app itself. This is the purest and the most secure form to run an app. An attacker that can exploit the app inside has no shell, no Linux tools, nothing at his disposal to further attack your network. The added security benefits are immense, that’s why one should always aim to use a distroless image if available! Don't take my word for it? No problem, maybe you take theirs:
+
+- [NIST SP 800-123/4.2.1 - Remove or Disable Unnecessary Services, Applications, and Network Protocols](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-123.pdf)
+- [Docker Docs - Don't install unnecessary packages](https://docs.docker.com/build/building/best-practices/#dont-install-unnecessary-packages)
+- [Docker Blog - Is Your Container Image Really Distroless?](https://www.docker.com/blog/is-your-container-image-really-distroless/)
 
 # SYNOPSIS 📖
 
