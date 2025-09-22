@@ -7,7 +7,7 @@
 - [x] [Plex](https://github.com/plexinc/pms-docker) - [11notes/plex](https://github.com/11notes/docker-plex) / [requested](https://github.com/11notes/RTFM/issues/5) by [framon98](https://github.com/framon98)
 - [x] [Joplin](https://github.com/laurent22/joplin) - [11notes/joplin](https://github.com/11notes/docker-joplin)
 - [x] [qBittorrent](https://github.com/qbittorrent/qBittorrent) - [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent)
-- [x] [git](https://github.com/git/git) - [11notes/distroless:git](https://github.com/11notes/docker-distroless/blob/master/git.dockerfilet)
+- [x] [git](https://github.com/git/git) - [11notes/distroless:git](https://github.com/11notes/docker-distroless/blob/master/git.dockerfile)
 
 # WORK IN PROGRESS 👨🏻‍💻
 - [ ] [Configarr](https://github.com/raydak-labs/configarr) requested by [keksiqc](https://www.reddit.com/user/keksiqc/)
