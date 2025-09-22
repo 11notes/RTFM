@@ -8,9 +8,10 @@
 - [x] [Joplin](https://github.com/laurent22/joplin) - [11notes/joplin](https://github.com/11notes/docker-joplin)
 - [x] [qBittorrent](https://github.com/qbittorrent/qBittorrent) - [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent)
 - [x] [git](https://github.com/git/git) - [11notes/distroless:git](https://github.com/11notes/docker-distroless/blob/master/git.dockerfile)
+- [x] [Configarr](https://github.com/raydak-labs/configarr) - [11notes/configarr](https://github.com/11notes/docker-configarr) / requested by [keksiqc](https://www.reddit.com/user/keksiqc/)
 
 # WORK IN PROGRESS 👨🏻‍💻
-- [ ] [Configarr](https://github.com/raydak-labs/configarr) requested by [keksiqc](https://www.reddit.com/user/keksiqc/)
+- [ ] Update Home Assistant to new workflow
 
 # TO BE REVIEWED 🗃
 - [ ] [Frigate](https://github.com/blakeblackshear/frigate) [requested](https://github.com/11notes/RTFM/issues/9) by [apommel](https://github.com/apommel)
