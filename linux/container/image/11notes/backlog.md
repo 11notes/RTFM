@@ -9,14 +9,17 @@
 - [x] [qBittorrent](https://github.com/qbittorrent/qBittorrent) - [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent)
 - [x] [git](https://github.com/git/git) - [11notes/distroless:git](https://github.com/11notes/docker-distroless/blob/master/git.dockerfile)
 - [x] [Configarr](https://github.com/raydak-labs/configarr) - [11notes/configarr](https://github.com/11notes/docker-configarr) / requested by [keksiqc](https://www.reddit.com/user/keksiqc/)
+- [x] Custom user agent for [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent) requested by [WellYoureWrongThere](https://www.reddit.com/user/WellYoureWrongThere/)
+- [x] Custom themes for [11notes/qbittorrent](https://github.com/11notes/docker-qbittorrent) requested by [rursach](https://www.reddit.com/user/rursache/) and [Nolzi](https://www.reddit.com/user/Nolzi/) and [PlanktonSuccessful65](https://www.reddit.com/user/PlanktonSuccessful65/)
 
 # WORK IN PROGRESS 👨🏻‍💻
-- [ ] Update Home Assistant to new workflow
+- [x] Update Home Assistant to new workflow and proper Python 3.13
 
 # TO BE REVIEWED 🗃
 - [ ] [Frigate](https://github.com/blakeblackshear/frigate) [requested](https://github.com/11notes/RTFM/issues/9) by [apommel](https://github.com/apommel)
 - [ ] [nut](https://github.com/networkupstools/nut) [requested](https://www.reddit.com/r/elevennotes/comments/1moc7a3/up_to_date_nut_docker_image/) by [cfouche](https://www.reddit.com/user/cfouche/)
 - [ ] [rdt-client](https://github.com/rogerfar/rdt-client) [requested](https://github.com/11notes/docker-radarr/issues/1) by [MrModest](https://github.com/MrModest)
-- [ ] [qBittorrent Themes](https://github.com/qbittorrent/qBittorrent/wiki/List-of-known-qBittorrent-themes) [requested](https://www.reddit.com/r/selfhosted/comments/1nj9dg2/comment/neoo427/) by [rursache](https://www.reddit.com/user/rursache/) and [PlanktonSuccessful65](https://www.reddit.com/user/PlanktonSuccessful65/)
+- [ ] [Transmission](https://github.com/transmission/transmission) requested by [MrObsidian_](https://www.reddit.com/user/MrObsidian_/)
+- [ ] [Deluge](https://github.com/deluge-torrent/deluge) requested by [MrObsidian_](https://www.reddit.com/user/MrObsidian_/)
 
 # REJECTED ❌
