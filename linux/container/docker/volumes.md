@@ -40,7 +40,7 @@ The last reason people are against using named volumes, is they think **they can
 name: "reverse-proxy"
 services:
   traefik:
-    image: "11notes/traefik:3.5.0"
+    image: "11notes/traefik"
     # ...
     volumes:
       - "var:/traefik/var"
@@ -57,7 +57,7 @@ volumes:
 name: "reverse-proxy"
 services:
   traefik:
-    image: "11notes/traefik:3.5.0"
+    image: "11notes/traefik"
     # ...
     volumes:
       - "var:/traefik/var"
@@ -78,7 +78,7 @@ volumes:
 name: "reverse-proxy"
 services:
   traefik:
-    image: "11notes/traefik:3.5.0"
+    image: "11notes/traefik"
     # ...
     volumes:
       - "var:/traefik/var"
@@ -99,7 +99,7 @@ volumes:
 name: "reverse-proxy"
 services:
   traefik:
-    image: "11notes/traefik:3.5.0"
+    image: "11notes/traefik"
     # ...
     volumes:
       - "var:/traefik/var"
@@ -115,12 +115,32 @@ volumes:
   plugins:
 
 # ╔═════════════════════════════════════════════════════╗
+# ║                        S3                           ║
+# ╚═════════════════════════════════════════════════════╝
+name: "reverse-proxy"
+services:
+  traefik:
+    image: "11notes/traefik"
+    # ...
+    volumes:
+      - "var:/traefik/var"
+      - "plugins:/traefik/plugins"
+    # ...
+
+volumes:
+  var:
+    driver: "s3fs"
+    name: "bucket"
+  plugins:
+
+
+# ╔═════════════════════════════════════════════════════╗
 # ║                       TMPFS                         ║
 # ╚═════════════════════════════════════════════════════╝
 name: "reverse-proxy"
 services:
   traefik:
-    image: "11notes/traefik:3.5.0"
+    image: "11notes/traefik"
     # ...
     volumes:
       - "var:/traefik/var"
