@@ -1,3 +1,5 @@
+![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+
 # KNOW-HOW - COMMUNITY EDUCATION
 This RTFM is part of a know-how and how-to section for the community to improve or brush up your knowledge. Selfhosting requires some decent understanding of the underlying technologies and their implications. These RTFMs try to educate the community on best practices and best hygiene habits to run each and every selfhosted application as secure and smart as possible. These RTFMs never cover all aspects of every topic, but focus on a small part. Security is not a single solution, but a multitude of solutions and best practices working together. This is a puzzle piece; you have to build the puzzle yourself. You'll find more resources and info’s at the end of the RTFM. Here is the list of current RTFMs:
 
@@ -15,13 +17,13 @@ Someone might tell you: **"This does not matter!"**, since you run your app and 
 # DISTROLESS - TINY HEROES
 Another advantage of a distroless image is its physical size. This is not a very important factor, but a welcome one none the less. Since a distroless image has nothing in it that’s not required to run the app, you save a lot of disk space in addition to reducing your attack surface. Don’t believe me? Well, here is an infamous example:
 
-| **image** | **size on disk** | **distroless** |
+| **image** | **size on disk** | **init default as** | **[distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md)** | supported architectures
 | ---: | ---: | :---: | :---: | :---: |
-| 11notes/qbittorrent | 17MB | ✅ |
-| home-operations/qbittorrent | 111MB | ❌ |
-| hotio/qbittorrent | 159MB | ❌ |
-| qbittorrentofficial/qbittorrent-nox | 172MB | ❌ |
-| linuxserver/qbittorrent | 198MB | ❌ |
+| 11notes/qbittorrent | 27MB | 1000:1000 | ✅ | amd64 |
+| home-operations/qbittorrent | 111MB | 65534:65533 | ❌ | amd64, arm64 |
+| hotio/qbittorrent | 159MB | 0:0 | ❌ | amd64, arm64 |
+| qbittorrentofficial/qbittorrent-nox | 167MB | 0:0 | ❌ | 386, amd64, arm64, armv6, armv7, riscv64 |
+| linuxserver/qbittorrent | 503MB | 0:0 | ❌ | amd64, arm64 |
 
 There are two important take aways from this table. First is the **size on disk**. Images are compressed when you download them, but will then be uncompressed on your container host. That’s the actual image size, not the size while it is still compressed on the registry. Second, the space savings and also download, unpacking savings are enormous. Up to a factor of multiples enormous, without any drawbacks or cutbacks. Projects like [eStargz](https://github.com/containerd/stargz-snapshotter) try to solve the rampant container image growth by lazy loading images during download, instead of focusing on creating small images in the first place. The solution is distroless, not lazy loading.
 

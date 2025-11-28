@@ -1,3 +1,5 @@
+![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+
 # KNOW-HOW - COMMUNITY EDUCATION
 This RTFM is part of a know-how and how-to section for the community to improve or brush up your knowledge. Selfhosting requires some decent understanding of the underlying technologies and their implications. These RTFMs try to educate the community on best practices and best hygiene habits to run each and every selfhosted application as secure and smart as possible. These RTFMs never cover all aspects of every topic, but focus on a small part. Security is not a single solution, but a multitude of solutions and best practices working together. This is a puzzle piece; you have to build the puzzle yourself. You'll find more resources and info’s at the end of the RTFM. Here is the list of current RTFMs:
 
