@@ -1,110 +1,100 @@
-![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+# KNOW-HOW - COMMUNITY EDUCATION
+This RTFM is part of a know-how and how-to section for the community to improve or brush up your knowledge. Selfhosting requires some decent understanding of the underlying technologies and their implications. These RTFMs try to educate the community on best practices and best hygiene habits to run each and every selfhosted application as secure and smart as possible. These RTFMs never cover all aspects of every topic, but focus on a small part. Security is not a single solution, but a multitude of solutions and best practices working together. This is a puzzle piece; you have to build the puzzle yourself. You'll find more resources and info’s at the end of the RTFM. Here is the list of current RTFMs:
 
-# ROOTLESS CONTAINER IMAGES
+- 📖 Know-How: Distroless container images, why you should use them all the time if you can! **[>>](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md)**
 
-*What are rootless container images and why are they the best option to run applications inside containers?*
+# ROOTLESS - WHAT IS THAT?
+Everybody knows root and who he is, at least everybody that is using Linux. If you don’t, read the [wiki article](https://en.wikipedia.org/wiki/Superuser) about him first, then come back to this RTFM. Most associate root with evil, which can be correct but is not necesseraly true. So what does root have to do with rootless? A container image runs a process (preferable only a single process, but there can be exceptions). That process needs to be run as some user, just like any other process does. Now here is where the problem starts. What user is used to run a process within a container is dependend on the container runtime. You may ask what the hell a container runtime is, well, these things here:
 
-# TL;DR - FOR BEGINNERS
-Rootless containers **never start or run as root**.  All apps inside are executed as an unprivileged user account. The apps inside **can never gain root privileges**. This prevents the app from performing most tasks which could harm you. Don't take my word for it? No problem, maybe you take theirs:
+-	Docker
+-	Podman
+-	Sysbox
+-	LXC
+-	k8s (k3s, k0s, Rancher, Talos, etc)
 
-- [NIST SP 800-123/4.2.3 - Configure Resource Controls Appropriately](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-123.pdf)
+The experts in the audience will now point out that most of these are **not container runtimes** but *container orchestrators*, which of course, is correct, but for the sake of the argument, pretend that these are just container runtimes. Each of these will execute a process within a container with a default user and will use that user in some special way. Since the majority of users on this sub use Docker, we focus **only on Docker**, and the issues associated with it and rootless. If you are running any of the other *"runtimes"* you can ignore this know-how and go back to your previous task, thank you.
 
-# SYNOPSIS 📖
+**I run Docker rootless so why should I care about this know-how?** Good point, you don’t. You too can go to your previous task and ignore this know-how.
 
-A rootless container is simply put a container that by default will not execute as root but as a pre-defined user during the creation of the image. A build file for Docker for instance, can contain the ```USER``` directive to set the user during the build process but also at the end. During the build process you most certainly want to execute everything as root, since you want to be able to install packages, modify the file system of the container and much more. The last step of a build file is the execution step, where the builder of the image instructs the container runtime what process to start and as **who**. If no user us specified it will **default to root.** You can however, specify any arbitrary UID and GID to start the container as. Let's check a simple build file with no user:
+# ROOTLESS - THE EVIL WITHIN
+Docker will start each and every process inside a container **as root**, unless the creator of the container image you are using told Docker to do otherwise or you yourself told Docker to do otherwise. Now wait a minute, didn’t your friend tell you containers are more secure and that’s why you should always use them, is your friend wrong? Partially yes, but as always, it depends. You see, if no one told Docker to use any other user, Docker will happily start the process in the container as root, but not as the super user root, more like a crippled disabled version of root. Still root, still somehow super, but with less privileges on your system. We can easily check this by comparing the [Linux capabillities]() of root on the host vs. root inside a container:
 
-```dockerfile
-FROM alpine
+**root on the Docker host**
+```
+Current: =ep
+Bounding set =cap_chown,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,cap_wake_alarm,cap_block_suspend,cap_audit_read,cap_perfmon,cap_bpf,cap_checkpoint_restore
 ```
 
-Now build this image and check the ID/GID of the user that runs inside the container image:
+vs. 
 
-```sh
-docker buildx build -f rtfm.dockerfile -t rtfm/rootless .
-docker run --rm rtfm/rootless id
-uid=0(root) gid=0(root) groups=0(root),0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)
+**root inside a container on the same host**
 ```
-
-As expected, the id of the process running inside the container is root (0:0). Now this is something we want to avoid for a number of reasons[^1], but how can we do that? Well, quite simple: Change the user as the last execution step in a build file.
-
-```dockerfile
-FROM alpine
-USER 1000:1000
-```
-
-Build the image again and run it:
-
-```sh
-docker buildx build -f rtfm.dockerfile -t rtfm/rootless .
-docker run --rm rtfm/rootless id
-uid=1000 gid=1000 groups=1000
-```
-
-Well, that’s what we want. The process inside the container is not executed as root, but as ```1000:1000```. Why does this matter though? I thought containers are by default secure? Sadly, they are not, and there is a huge misconception about this topic and some fair amount of misinformation, especially from certain container image providers that make you believe running a process as root inside a container poses almost no risk at all.
-
-# THE LIES THEY SPREAD ABOUT ROOT
-
-Let’s talk about capabilities and the Linux kernel real quickly. Capabilities give you access to certain Linux kernel features. Normal users do not get any caps at all, but root does, even in a container. Let's quicky build an image with a binary needed to display our Linux capabilities:
-
-```dockerfile
-FROM alpine
-RUN set -ex; \
-  apk --update --no-cache add libcap;
-```
-
-```sh
-docker buildx build -f rtfm.dockerfile -t rtfm/caps .
-docker run --rm rtfm/caps capsh --print
-
 Current: cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap=ep
+Bounding set =cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap
 ```
 
-Now that's a lot of capabilities. Just to quickly compare it when running the container as a different user:
+vs. 
 
-```sh
-docker run --rm -u 1000:1000 rtfm/caps capsh --print
-
+**a normal user account (doesn't have to exist)**
+```
 Current: =
+Bounding set =
 ```
 
-As you can see, root has many Linux caps, while the user 1000 has none, just like it should be. So why does root in a container, an isolated namespace, have any capabilities at all? Well, Docker and other container orchestrations ship with **default capabilities** for each container. Why is it done that way? Because most of the capabilities are needed for an app running inside the container, but most does not mean all, and herein lies the issue with root inside a container.
+We can see that root inside a container has a lot less [caps](https://man7.org/linux/man-pages/man7/capabilities.7.html) than root on the host, but why is that? Who is the decider for this? Well it’s Docker. Docker has a [default set of caps](https://docs.docker.com/engine/containers/run/#runtime-privilege-and-linux-capabilities) that it will automatically grant to root inside a container. Why does Docker do this? Because if you start looking at the granted caps, you see that most of these are not exactly dangerous in the first place. ```cap_chown``` for instance gives root the ability to chown, pretty obvious stuff. ```cap_net_raw``` might be a little too much on the other hand, since it allows root to basically see all traffic on all interfaces assigned to the container. If you by any chance copied from a compose the setting ```network_mode: host```, then root can see all network traffic of the entire host. Not something you want. It gets worse if you for some reason copy/pasted ```privileged:true```, you give root the option to escape on the host and then do whatever as actual root on the host. We also see that the normal user has no caps at all, nada, and that’s actually what we want! Not a handicapped root, but **no root at all**.
 
-Why give an app that runs inside the container [cap_net_raw]( https://man7.org/linux/man-pages/man7/capabilities.7.html) if it does not need that functionality? Well that’s exactly what you are doing if you execute the container as root. It get’s even worse if you copy/pasted some random compose.yml that contains for whatever reason the ```privileged: true``` flag. With this flag enabled, root within the container can assign itself **all capabilities** including the ones to access the host from within the container. If you execute said container as a user, not root, this is not possible, even though this flag was present.
+It is reasonable that you don’t want that a process within the container is run as root, but how do you do that or better how do you, the end user, make sure the image provider didn’t set it up that way?
 
-# S6 AND ROOT
+# ROOTLESS - DROP ROOT
+Two options are at your disposal; For the users who don’t run Docker as mentioned in the intro: go away, we know that you know of the third way:
 
-Now address the elephant in the room: Starting a container as root but then using [setuid](https://man7.org/linux/man-pages/man2/setuid.2.html) to drop to another UID for the actual app. Using [s6](https://github.com/just-containers/s6-overlay) to run multiple services inside a container, which on its own is a little bit against the idea of containers in the first place (one service = one container) is odd. The issue doesn’t stem from the multiple services though, but from s6 requiring to start the container as root to then use setuid to change to another user you can define via an environment variable.
+-	Setting the user yourself
+-	Hoping the image maintainer set another user
 
-The app does not run as root, it runs as the UID specified, so far so good, but the container starts as root, which means anything in the pre-startup phase is executed as root. This means anything in that pre-startup phase (aka s6) can be abused and misused to do all kinds of things. Now is this easy to do or achieve? No. It’s a highly sophisticated attack from within the app inside the container, but it is possible and that’s the problem. An attacker can use s6 to give itself more capabilities which are present thanks to s6 being run as root, something that does not work if s6 would not be executed as root (which doesn’t work because of setuid issue).
-
-S6 is used for convenience, foremost to ```chown``` the directories with the correct UID/GID when you use bind mounts and you forgot to set the correct permissions. This tradeoff between security and convenience is not a very good trade in my opinion, ignoring the fact that s6 is also used to run a single service inside a container, something s6 is not needed for. It also prevents the image from running [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) all together, because s6 relies on OS libraries to work (sh, chown, chmod). Using a shell inside your image means it’s not distroless, period.
-
-# S6 AND PSEUDO ROOTLESS (SUID PROBLEM)
-
-Even if you start an s6 based image with a user, there is an executable present in the image that will **always execute as root**, that’s also why you can't set the ```no-new-privileges:true``` flag, because this prevents this executable to run as root, breaking the whole **rootless** image. Don’t believe me? Well, simply search any image that uses s6 or pretends to be rootless with ```find / -user root -perm -4000 -exec ls -ldb {} \;```. This will show you all executables that will execute as root, even if you are not running as root.
-
-What do you find in all s6 based images:
+**Setting it yourself** is actually very easy to do. Edit your compose and add this to it:
 ```
--rwsr-xr-x 1 root root 42216 May  7 08:23 /package/admin/s6-overlay-helpers-0.1.2.0/command/s6-overlay-suexec
+services:
+  alpine:
+    image: "alpine"
+    user: "11420:11420"
 ```
 
-What happens if you start an image like this while preventing new Linux caps:
+Now docker will execute all processes in the container as **11420:11420** and not as root. Set and done. This only works if you take care of all permissions as well. Remember the process in the container will use this UID/GID, meaning if you mount a share, this UID/GID needs to have access to this share or you will run into simple permission problems.
+
+**Hoping the image maintainer set another user** is a bit harder to check and also you need to trust the maintainer with this. How do you check what user was set in the container image? Easy, a container build file has a directive called ```USER``` which allows the image maintainer to set any user they like. It’s usually the last line in any build file. [Here](https://github.com/11notes/docker-qbittorrent/blob/master/arch.dockerfile#L212) is an example of this practice. For those too lazy to click on a link:
+
 ```
-docker run --rm -ti --user 7000:7000 --security-opt=no-new-privileges:true ...
-s6-overlay-suexec: fatal: child failed with exit code 100
+# :: EXECUTE
+  USER ${APP_UID}:${APP_GID}
+  ENTRYPOINT ["/usr/local/bin/qbittorrent"]
+  CMD ["--profile=/opt"]
 ```
 
-To no ones surprise, it does not work. As you can see no matter what user you set when starting the image, there will always be a process executed as root. A true rootless image does not have an executable in it that can be executed as root, it is by default rootless and can only run as a pre coded user ID. A true rootless image can use ```no-new-privileges:true``, if your image can't, then it **is not rootless!**
+Where ```APP_UID``` and ```APP_GID``` are variables defined as 1000 and 1000. This means this image will by default always start as **1000:1000** unless you overwrite this setting with the above mentioned ```user:``` setting in your compose.
 
+**Uh, I have an actual user on my server that is using 1000:1000, so WTF?** Don’t worry about this scenario. Unless you accidentally mount that users home directory or any other directory that user has access to into the container using the same UID/GID, there is no problem in having an actual user with the same UID/GID as a process inside a container. Remember: Containers are isolated namespaces. The can't interact with a process started by a user on the same host.
 
-# ROOTLESS RUNTIMES OR USERNS MAP
+**I don’t need any of this, I use PUID and PGID thank you.** Well, you do actually. Using PUID/PGID which is not a Docker thing, but a habit that certain image providers perpetuate with their images, still starts the image as root. Yes, root will then drop its privileges down to another user, the one you specified via PUID/PGID, but there is still a process in there running as root. True rootless has no process run as root and doesn’t start as root. Even if root is only used briefly, why open yourself up to that brief risk when you can mitigate it very easily by using rootless images in the first place?
 
-The solution, besides running rootless images, is to simply run a rootless container runtime, like Podman, k8s, sysbox and so on. Docker itself can be run rootless too, and requires some preparation to do so. You can also use userns-remap to remap root inside the container to an arbitrary user on the host, eliminating most of the issues which are presented by images that use root. The problem with all of this is, that by default, most people use Docker, and Docker is by default **not rootless**. This means that most people are affected by the issues described and should opt, whenever possible, always to use **rootless images** and not rely on s6 based images, unless the suid was changed to an unprivileged ID.
+**Bonus: security_opt** can be used to prevent a container image from gaining new privileges by privilege escallation (granting itself mor caps since the image has default caps granted to the root user in the image). This can easily be done by adding this to each of your compose:
 
-# CONCLUSION
+```
+security_opt:
+    - "no-new-privileges=true"
+```
 
-Now we know why rootless images are the better option to run apps withing a container. It requires a little more preparation for the image creator to make their images run rootless by default, but it’s possible for any apps. If an app requires special privileges, instead of granting the entire container image said capabilities, the maintainer of the image can also simply assign the privilege to the binary that requires said capability, reducing the attack surface even more. Combined with [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md) images, rootless is the best approach to secure images for all and not just a select few who know what they are doing.
+# ROOTLESS - SO ANY IMAGE IS ROOTLESS?
+Sadly no. Actually **most images use root**. Basically, all images for the most popular images all use root, but why is that? **Convenience**. Using root means you can use ```cap_chown``` remember? This means you can chown folders and fix permission issues before the user of the image even notices that he forgot something. The sad part is you trade convenience for security, as you basically always do. Your node based app is now running as root and has ```cap_net_raw``` even though it does not need that, so why give it that cap in the first place? Many images break when you switch from root to any combination of UID/GID, because the creators of these images did not anticipate you doing so or simply ignored the fact that some users like security more than they like convenience. It is best you use images that are **by default already rootless**, meaning they don’t start as root and they never use root at all. There are some image providers that do by default only provide such images, others provide by default images that run as root but can be run rootless, when using advanced configurations.
 
-**If you want better security for your container images, run them rootless from the start, not after they started.**
+That’s another issue we need to mention. If an image can be run rootless in the first place, why is that not the default method of running said image? Why does the end user have to jump through hoops to run the image rootless? We come again to the same answer: **Convenience**. Said image providers who do this, want that their images run on first try, no permission errors or missing caps. Presenting users with advanced compose files to make the image run rootless, is too advanced for the normal user, at least that’s what they think. I don’t think that. **I think every user deserves a rootless image by default** and only if special configurations require elevated privileges, these can be used and highlighted in an advanced way. Not providing rootless images by default basically robs the normal users of their security. Everyone deserves security, not just the greybeards that know how to do it.
 
-[^1]: Root inside a container is not the same as root on the host, but root does get a lot of system capabilities that can be misused for container exploitation. If the container image was started with the privileged flag, root can now give itself any and all privileges and actually access the host from within the container.
+# ROOTLESS - CONCLUSION
+Use rootless images, prefer rootless images. Do not trade your convenience for security. Even if you are not a greybeard, you deserve secure images. Running rootless images is no hassle, if anything, you learn how Linux file permission work and how you mount a CIFS share with the correct UID/GID. Do not bow down and simply accept that your image runs as root but could be run rootless. Demand rootless images as default, not as an option! Take back your right for security!
+
+I hope you enjoyed this short and brief educational know-how guide. If you are interested in more topics, feel free to ask for them. I will make more such RTFMs in the future.
+
+**Stay safe, stay rootless!**
+
+# ROOTLESS - SOURCES
+- [NIST SP 800-123/4.2.3 - Configure Resource Controls Appropriately](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-123.pdf)
+- [NIST SP 800-190/3.1.2 - Image configuration defects](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-190.pdf)
