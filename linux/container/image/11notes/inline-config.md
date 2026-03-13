@@ -1,22 +1,25 @@
-![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+![banner](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/banner/README.png)
 
 # INLINE CONFIGS
-*Why bother with files when you can use environment variables?*
+
+_Why bother with files when you can use environment variables?_
 
 # TL;DR - FOR BEGINNERS
+
 Instead of providing your config as an actual file via a mounted volume, you can provide it as an environment variable and even have the benefits of using the environment variables from your host or pass them to your compose, neat!
 
 # SYNOPSIS 📖
+
 Simple config files for an app can be very annoying if they have to be provided via an actual file, that needs to be mounted inside the container to provide the needed configuration. An alternative method, if the image supports it, is to provide the configuration inline, meaning inside the compose itself, not as a file, but as simple text. The image will then convert the content of your variable into the actual config file, instead of mounting it in. This can have multiple benefits vs. traditional file mounting, including the ability to add dynamic information via variables from compose itself (host environment or environment passed to compose).
 
 ## SET INLINE CONFIG
+
 How to provide a proper inline config? Check out this example:
 
 ```yaml
 name: "dns"
 
-x-lockdown: &lockdown
-  # prevents write access to the image itself
+x-lockdown: &lockdown # prevents write access to the image itself
   read_only: true
   # prevents any process within the container to gain more privileges
   security_opt:
@@ -105,9 +108,10 @@ networks:
   frontend:
 ```
 
-As you can see, you can even use ```${MY_OWN_PASSWORD}``` to set dynamic variables from your host or what you have passed to your compose/k8s to set the password directly inside the config if need be.
+As you can see, you can even use `${MY_OWN_PASSWORD}` to set dynamic variables from your host or what you have passed to your compose/k8s to set the password directly inside the config if need be.
 
 # CONCLUSION
+
 If the image supports it, inline configurations via environment variables are a better and more dynamic way than static files that need to be edited.
 
 **File are so outdated, am I right?**

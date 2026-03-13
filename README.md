@@ -1,4 +1,4 @@
-![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+![banner](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/banner/README.png)
 
 # RTFM (read the fucking manual)
 

@@ -1,10 +1,11 @@
-![banner](https://github.com/11notes/static/blob/main/img/banner/README.png?raw=true)
+![banner](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/banner/README.png)
 
 # WHY BUILD CUSTOM IMAGES AND NOT JUST UPDATE THE OFFICIAL ONES?
 
-*People are quick to tell other developers to just create a PR (pull request) like on github, but what are the actual implications of this and why is it rarely done?*
+_People are quick to tell other developers to just create a PR (pull request) like on github, but what are the actual implications of this and why is it rarely done?_
 
 # TL;DR - FOR BEGINNERS
+
 Time. It costs an immense amount of time to convince others to go rootless or even distroless and more often than not you get huge pushback so in the end, nothing changes but you wasted hours. Hours that could have been used to create the better image in the first place, instead of battling with other devs.
 
 # SYNOPSIS 📖
@@ -15,7 +16,7 @@ People who don’t write code or barely any code often quickly point out that a 
 
 That’s very simple: **It requires a lot of effort.** Most changes to a container image to repackage an app as a custom image are severe. This means they can’t just be pushed to the original image without disrupting how the original image is created. Many things in the original image creation process (CI/CD[^1]) would have to be changed and these many, many changes are seldom seen as a benefit. Think the debate of [rootless](https://github.com/11notes/RTFM/blob/main/linux/container/image/rootless.md) and [distroless](https://github.com/11notes/RTFM/blob/main/linux/container/image/distroless.md). Many developers don’t see a problem in running their app as root, they even see it as a benefit, so that every user can use it, without worrying about file permissions or kernel restrictions. Spending many hours to create a custom CI/CD process to make their original container image better, only for these changes to be rejected is a waste of everyone’s time.
 
-The next issue with this simple expression *"just create a PR, duh!"* is politics. Many projects do not allow changes from outsiders, by default. Others require you to sign off on your contribution, meaning you will not get credited for all the work you did. Bringing politics into programming has almost never benefits. Structure is important, but why fight political battles in why rootless is better when you can instead just create your rootless image yourself, without everyone fighting you along the way? People and especially developers do not like change. An outsider telling them what they do is wrong will automatically generate pushback and nothing else. Time spent fighting those pushbacks can be better used to develop a better container image.
+The next issue with this simple expression _"just create a PR, duh!"_ is politics. Many projects do not allow changes from outsiders, by default. Others require you to sign off on your contribution, meaning you will not get credited for all the work you did. Bringing politics into programming has almost never benefits. Structure is important, but why fight political battles in why rootless is better when you can instead just create your rootless image yourself, without everyone fighting you along the way? People and especially developers do not like change. An outsider telling them what they do is wrong will automatically generate pushback and nothing else. Time spent fighting those pushbacks can be better used to develop a better container image.
 
 # PERSONAL EXPERIENCE
 
@@ -23,7 +24,7 @@ I’ve had my fair share of all these political interactions. I’ve had develop
 
 # CONCLUSION
 
-The next time you see someone pointing out to *"just create a PR"* think about how hard this actually is and what a can of worms in terms of politics this opens. All this just to switch a container image from root to rootless.
+The next time you see someone pointing out to _"just create a PR"_ think about how hard this actually is and what a can of worms in terms of politics this opens. All this just to switch a container image from root to rootless.
 
 **If you want things done right, you have to do it yourself.**
 
